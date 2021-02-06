@@ -1,0 +1,9 @@
+@font-face {
+  font-family: "Genshin";
+  src: local("Genshin"),
+   url(./fonts/genshin.ttf) format("truetype");
+}
+
+h1 {
+  font-family: 'Genshin', Helvetica, Arial;
+}
