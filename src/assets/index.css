@@ -4,6 +4,19 @@
    url(./fonts/genshin.ttf) format("truetype");
 }
 
-h1 {
+h1,h2,h3,h4,h5 {
   font-family: 'Genshin', Helvetica, Arial;
+  @apply text-gray-900;
+}
+
+h1 {
+  @apply text-2xl;
+}
+
+#app {
+  @apply w-screen flex justify-center;
+}
+
+th,tr {
+  @apply w-4;
 }
