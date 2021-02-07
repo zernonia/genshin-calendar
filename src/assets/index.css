@@ -17,6 +17,18 @@ h1 {
   @apply w-screen flex justify-center;
 }
 
-th,tr {
-  @apply w-4;
+.grid-custom {
+  grid-auto-rows: minmax(auto, 200px);
+}
+
+.grid-image {
+  @apply w-full h-full object-cover object-right rounded-xl transition-all duration-500;
+}
+
+.grid-image:hover {
+  object-position: left;
+}
+
+.grid-animation {
+  transition: width 0.5s ease-in-out;
 }

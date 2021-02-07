@@ -1,16 +1,24 @@
 
 interface Event {
-  eventWish: WishEvent[]
+  characterBanner: BaseEvent[],
+  weaponBanner: BaseEvent[],
+  specialEvent: SpecialEvent[],
+  miniEvent: BaseEvent[]
 }
 
-interface WishEvent {
+interface BaseEvent {
   title: string,
   startDate: string,
   endDate: string,
   image: string
 }
 
+interface SpecialEvent extends BaseEvent {
+  order?: number,
+}
+
 export {
   Event,
-  WishEvent
+  BaseEvent,
+  SpecialEvent
 }
