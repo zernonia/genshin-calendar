@@ -1,48 +1,19 @@
 <template>
   <div>
-    <!-- <table>
-      <tr>
-        <th v-for="(i, index) in startEndDifferent" :key="index" :colspan="calculateDaysInMonth(index)">{{ computeMonthName(index) }}</th>
-      </tr>
-      <tr>
-        <th v-for="(i, index) in startEndDifferentDay" :key="index">{{ computeNumberOfDaysInDay(index) }}</th>  
-      </tr>
-      <tbody>
-        <tr>
-          <td colspan="1"></td>
-          <td v-for="(item, index) in eventDetails.eventWish" :key="index" :colspan="computeColSpanEvent(item.startDate, item.endDate)" class=" h-56" >
-            <img class=" w-full h-full object-cover" :src="item.image" alt="" srcset="">
-          </td>
-        </tr>
-        <tr>2</tr>
-        <tr>3</tr>
-        <tr>4</tr>
-      </tbody>
-    </table> -->
-    <section class="grid w-screen max-w-screen-lg" :style="{ gridTemplateColumns: `repeat(${ startEndDifferentDay },1fr)` }">
+    <div class="grid w-screen max-w-screen-lg" :style="{ gridTemplateColumns: `repeat(${ startEndDifferentDay },1fr)` }">
       <div v-for="(i, index) in startEndDifferent" :key="index" :style="{ gridColumn: ` ${calculateOffSet(index)} / span ${calculateDaysInMonth(index)}` }" >{{ computeMonthName(index) }}</div>
       <span v-for="(i, index) in startEndDifferentDay" :key="index">{{ computeNumberOfDaysInDay(index) }}</span>
       <div v-for="(item, index) in eventDetails.eventWish" :key="index" :style="{ gridRow: 3, gridColumn: `${computeStartSpan(item)} / span ${computeEndSpan(item)}` }">
-        <img class=" w-full h-full object-cover" :src="item.image" alt="" srcset="">
+        <img class=" w-full h-full object-cover" :src="item.image">
       </div>
-    </section>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import dayjs, { Dayjs } from 'dayjs'
 import { computed, defineComponent, ref } from 'vue'
-
-interface Event {
-  eventWish: WishEvent[]
-}
-
-interface WishEvent {
-  title: string,
-  startDate: string,
-  endDate: string,
-  image: string
-}
+import { WishEvent, Event } from '../utils/interface'
 
 export default defineComponent({
   setup(){
@@ -127,6 +98,7 @@ export default defineComponent({
 })
 
 </script>
+
 <style>
 
 </style>
