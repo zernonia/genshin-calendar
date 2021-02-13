@@ -235,11 +235,10 @@ export default defineComponent({
       })
     })
 
-    computeSortMethod.value
 
-    // onMounted(() => {
-      
-    // })
+    onMounted(() => {
+      computeSortMethod      
+    })
 
     const pastEvent = (time?: string) => {
       if(dayjs(time).isAfter(dayjs(), 'd') || dayjs(time).isSame(dayjs(), 'd') ) {
