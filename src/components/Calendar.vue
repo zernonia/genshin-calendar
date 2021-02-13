@@ -237,7 +237,7 @@ export default defineComponent({
 
 
     onMounted(() => {
-      computeSortMethod      
+      console.log(computeSortMethod.value)      
     })
 
     const pastEvent = (time?: string) => {
