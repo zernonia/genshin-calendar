@@ -180,7 +180,6 @@ export default defineComponent({
       
       if(month == 0) return offset
       else {
-        console.log(offset);
         offset = calculateDaysInMonth(month - 1) + offset
         return offset
       }
@@ -223,7 +222,7 @@ export default defineComponent({
       }
     }
 
-    const computeSortMethod = computed(() => {
+    const computeSortMethod = () => {
       eventDetails.value.specialEvent.sort((a: SpecialEvent,b: SpecialEvent) => {
         if(dayjs(a.startDate).isAfter(dayjs(b.startDate),'d')) {
           return 1
@@ -235,13 +234,9 @@ export default defineComponent({
       eventDetails.value.specialEvent.sort((a: SpecialEvent,b: SpecialEvent) => {
         if(dayjs().isAfter(dayjs(b.endDate),'d')) { return -1 } else { return 0 }
       })
+    }
 
-      return eventDetails.value.specialEvent
-    })
-
-    onMounted(() => {
-      computeSortMethod.value
-    })
+    computeSortMethod()
 
     const pastEvent = (time?: string) => {
       if(dayjs(time).isAfter(dayjs(), 'd') || dayjs(time).isSame(dayjs(), 'd') ) {
