@@ -1,7 +1,9 @@
 <template>
-  <div class=" max-w-screen-xl mt-4">
+  <div class=" max-w-screen-xl w-full">
     <h1>Genshin Calendar</h1>
-    <Calendar />
+    <div class=" mt-4 w-full bg-gray-800 px-8 py-6 rounded-2xl relative">
+      <Calendar />
+    </div>
   </div>
 </template>
 

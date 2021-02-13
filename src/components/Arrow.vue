@@ -8,12 +8,12 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   props: {
     width: {
-      type: String,
-      default: '24'
+      type: Number,
+      default: 24
     },
     height: {
-      type: String,
-      default: '24'
+      type: Number,
+      default: 24
     },
   }
 })

@@ -6,19 +6,60 @@
 
 h1,h2,h3,h4,h5 {
   font-family: 'Genshin', Helvetica, Arial;
-  @apply text-gray-900;
+  @apply text-white;
 }
 
 h1 {
-  @apply text-2xl;
+  @apply text-4xl;
 }
 
 #app {
-  @apply w-screen flex justify-center;
+  background-image: url('../../public/images/background.png');
+  @apply w-full p-10 flex flex-col justify-center items-center bg-fixed;
 }
 
 .grid-custom {
-  grid-auto-rows: minmax(auto, 200px);
+  /* grid-auto-rows: minmax(auto, 200px); */
+  grid-auto-rows: min-content;
+  @apply relative;
+}
+.hover{
+  content: "";
+  top: 10px;
+  position: absolute;
+  height: 92.5%;
+  width: 15%;
+  z-index: 1;
+}
+.hover-left {
+  left: 0;
+  background: -moz-linear-gradient(left, rgb(31 41 55 / 100%) 0%, rgba(255, 255, 255, 0) 100%);
+  /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, right top, color-stop(0%, rgb(31 41 55 / 100%)), color-stop(100%, rgba(255, 255, 255, 0)));
+  /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(left, rgb(31 41 55 / 100%) 0%, rgba(255, 255, 255, 0) 100%);
+  /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(left, rgb(31 41 55 / 100%) 0%, rgba(255, 255, 255, 0) 100%);
+  /* Opera 11.10+ */
+  background: -ms-linear-gradient(left, rgb(31 41 55 / 100%) 0%, rgba(255, 255, 255, 0) 100%);
+  /* IE10+ */
+  background: linear-gradient(to right, rgb(31 41 55 / 100%) 0%, rgba(255, 255, 255, 0) 100%);
+  /* W3C */
+}
+.hover-right {
+  right:  0;
+  background: -moz-linear-gradient(right, rgb(31 41 55 / 100%) 0%, rgba(255, 255, 255, 0) 100%);
+  /* FF3.6+ */
+  background: -webkit-gradient(linear, right top, right top, color-stop(0%, rgb(31 41 55 / 100%)), color-stop(100%, rgba(255, 255, 255, 0)));
+  /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(right, rgb(31 41 55 / 100%) 0%, rgba(255, 255, 255, 0) 100%);
+  /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(right, rgb(31 41 55 / 100%) 0%, rgba(255, 255, 255, 0) 100%);
+  /* Opera 11.10+ */
+  background: -ms-linear-gradient(right, rgb(31 41 55 / 100%) 0%, rgba(255, 255, 255, 0) 100%);
+  /* IE10+ */
+  background: linear-gradient(to left, rgb(31 41 55 / 100%) 0%, rgba(255, 255, 255, 0) 100%);
+  /* W3C */
 }
 
 .grid-image {
@@ -31,4 +72,13 @@ h1 {
 
 .grid-animation {
   transition: width 0.5s ease-in-out;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }

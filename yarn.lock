@@ -1545,6 +1545,11 @@ vscode-web-custom-data@^0.3.2:
   resolved "https://registry.yarnpkg.com/vscode-web-custom-data/-/vscode-web-custom-data-0.3.3.tgz#9e1f2388c718d6f190038a19d144834a436b876f"
   integrity sha512-orMjjj1r4efP5ocODYZm3orpANakRBsxPZPDoD5UIrFOPKDFtMJQLp6PIH1rb3AYVRD1iYXMhDQoC6tZ+DrigA==
 
+vue-dragscroll@^2.1.3:
+  version "2.1.3"
+  resolved "https://registry.yarnpkg.com/vue-dragscroll/-/vue-dragscroll-2.1.3.tgz#6f1deb05c6378b06417f56868652b12877974f3c"
+  integrity sha512-A2dZ/JYxLMSikvgdnaffWKL6A/fiIrDt6rviNy13a1TuXaw+TQhqYP2vqt/v9bowbJUjaXjMKNBOSKAiNa5vqA==
+
 vue@^3.0.5:
   version "3.0.5"
   resolved "https://registry.yarnpkg.com/vue/-/vue-3.0.5.tgz#de1b82eba24abfe71e0970fc9b8d4b2babdc3fe1"

@@ -1,23 +1,32 @@
 <template>
-  <div>
-    <div class="grid w-screen max-w-screen-xl gap-x-2 sticky top-0 z-10 bg-white" :style="{ gridTemplateColumns: `repeat(${ startEndDifferentDay },1fr)` }">
-      <div v-for="(i, index) in startEndDifferent" :key="index" :style="{ gridColumn: ` ${calculateOffSet(index)} / span ${calculateDaysInMonth(index)}` }" >{{ computeMonthName(index) }}</div>
-      <span :style="{ opacity: computeShowDate(index) }" v-for="(i, index) in startEndDifferentDay" :key="index">{{ computeNumberOfDaysInDay(index) }}</span>
-      <Arrow :width="15" :height="15" class=" absolute" :style="{ gridRow: 2, gridColumn: `${computeTodayLine} / span 1`, left: '-7px'  }" />
+  <transition name="fade">
+    <div v-if="scrollLeftShow" class=" hover hover-left" @mousedown="scrollEvent('left')" @mouseup="endScrollEvent" @mouseleave="endScrollEvent" @touchstart="scrollEvent('left')" @touchend="endScrollEvent" @touchcancel="endScrollEvent" ></div>
+  </transition>
+  <transition name="fade">
+    <div v-if="scrollRightShow" class=" hover hover-right" @mousedown="scrollEvent('right')" @mouseup="endScrollEvent" @mouseleave="endScrollEvent" @touchstart="scrollEvent('right')" @touchend="endScrollEvent" @touchcancel="endScrollEvent" ></div>
+  </transition>
+  <div class=" overflow-x-scroll" @scroll="scrollChecker">
+    <div class="grid w-screen gap-x-2 sticky top-0 z-10 text-white font-semibold text-xl" :style="{ gridTemplateColumns: `repeat(${ startEndDifferentDay }, 20px)` }">
+      <h3 class=" font-medium border-l-2 pl-2 " v-for="(i, index) in startEndDifferent" :key="index" :style="{ gridColumn: ` ${calculateOffSet(index)} / span ${calculateDaysInMonth(index)}` }" >{{ computeMonthName(index) }}</h3>
+      <span class=" text-center" :style="{ opacity: computeShowDate(index) }" v-for="(i, index) in startEndDifferentDay" :key="index">{{ computeNumberOfDaysInDay(index) }}</span>
+      <img src="../assets/arrow.png" class=" absolute transform rotate-90 scale-150 " :style="{ gridRow: 2, gridColumn: `${computeTodayLine} / span 1`, top: '-20px' }" />
     </div>
-    <div  class="grid w-screen max-w-screen-xl grid-custom gap-x-2 gap-y-2" :style="{ gridTemplateColumns: `repeat(${ startEndDifferentDay },1fr)` }">
-      <div id="today" class=" bg-gray-400 hover:bg-gray-500 transition-all duration-500" style="width: 2px;" :style="{ gridRow: `1 / ${ eventDetails.specialEvent.length + 3 }` , gridColumn: `${computeTodayLine} / span 1`  }" ></div>
-      <div v-for="(item, index) in eventDetails.characterBanner" :key="index" :style="{ gridRow: 1, gridColumn: `${computeStartSpan(item)} / span ${computeEndSpan(item)}` }">
-        <img class="grid-image" :src="item.image">
-      </div>
-      <div v-for="(item, index) in eventDetails.weaponBanner" :key="index" :style="{ gridRow: 2, gridColumn: `${computeStartSpan(item)} / span ${computeEndSpan(item)}` }">
-        <img class="grid-image" :src="item.image">
-      </div>
-      <!-- <div v-for="(item, index) in eventDetails.miniEvent" :key="index" :style="{ gridRow: 3, gridColumn: `${computeStartSpan(item)} / span ${computeEndSpan(item)}` }">
-        <img class="grid-image" :src="item.image">
-      </div> -->
-      <div v-for="(item, index) in eventDetails.specialEvent" :key="index" :style="{ gridRow: index + 3, gridColumn: `${computeStartSpan(item)} / span ${computeEndSpan(item)}` }">
-        <img class="grid-image" :src="item.image">
+    <div class=" relative">
+      <div  class="grid w-screen grid-custom gap-x-2 gap-y-2 my-4" :style="{ gridTemplateColumns: `repeat(${ startEndDifferentDay }, 20px)` }">
+        <div v-for="(item, index) in eventDetails.characterBanner" :key="index" :style="{ gridRow: 1, gridColumn: `${computeStartSpan(item)} / span ${computeEndSpan(item)}`, height: '200px' }">
+          <img class="grid-image" :style="{ filter: pastEvent(item.endDate) }" :src="item.image">
+        </div>
+        <div v-for="(item, index) in eventDetails.weaponBanner" :key="index" :style="{ gridRow: 2, gridColumn: `${computeStartSpan(item)} / span ${computeEndSpan(item)}`, height: '200px' }">
+          <img class="grid-image" :style="{ filter: pastEvent(item.endDate) }" :src="item.image">
+        </div>
+        <!-- <div v-for="(item, index) in eventDetails.miniEvent" :key="index" :style="{ gridRow: 3, gridColumn: `${computeStartSpan(item)} / span ${computeEndSpan(item)}` }">
+          <img class="grid-image" :src="item.image">
+        </div> -->
+        <div v-for="(item, index) in eventDetails.specialEvent" :key="index" :style="{ gridRow: index + 3, gridColumn: `${computeStartSpan(item)} / span ${computeEndSpan(item)}`, height: '200px' }">
+          <img class="grid-image" :style="{ filter: pastEvent(item.endDate) }" :src="item.image">
+        </div>
+        <div id="today" class=" bg-gray-400 hover:bg-gray-500 transition-all duration-500" style="width: 3px;" :style="{ gridRow: `1 / ${ eventDetails.specialEvent.length + 3 }` , gridColumn: `${computeTodayLine} / span 1`  }" ></div>
+        
       </div>
     </div>
   </div>
@@ -25,8 +34,8 @@
 
 <script lang="ts">
 import dayjs, { Dayjs } from 'dayjs'
-import { computed, defineComponent, ref } from 'vue'
-import { Event, BaseEvent } from '../utils/interface'
+import { computed, defineComponent, onMounted, ref } from 'vue'
+import { Event, BaseEvent, SpecialEvent } from '../utils/interface'
 import Arrow from '../components/Arrow.vue'
 
 export default defineComponent({
@@ -36,6 +45,7 @@ export default defineComponent({
   setup(){
     const startDate = ref('2021-02-02')
     const endDate = ref('2021-03-22')
+    const interval = ref(0)
 
     const eventDetails = ref<Event>({
       characterBanner: [
@@ -99,7 +109,6 @@ export default defineComponent({
           endDate: '2021-02-26',
           image: './images/May_Fortune_Find_You_Rewards.png'
         },
-        
         {
           title: 'Stand by Me',
           startDate: '2021-02-18',
@@ -117,6 +126,24 @@ export default defineComponent({
           startDate: '2021-02-02',
           endDate: '2021-03-15',
           image: './images/Battle-Pass-Lantern-Lit-Sky.png'
+        },
+        {
+          title: 'Five Flushes of Fortune',
+          startDate: '2021-02-02',
+          endDate: '2021-02-10',
+          image: './images/Five_Flushes_of_Fortune.jpg'
+        },
+        {
+          title: 'A Sea of Lights" Fan Art Event',
+          startDate: '2021-02-18',
+          endDate: '2021-02-24',
+          image: './images/A_Sea_of_Lights_Fan_Art_Event.png'
+        },
+        {
+          title: 'Ley Line Overflow',
+          startDate: '2021-02-26',
+          endDate: '2021-03-05',
+          image: './images/Ley_Line_Overflow.jpg'
         },
       ]
     })
@@ -173,9 +200,6 @@ export default defineComponent({
 
     const computeDateChecker = computed(() => {
       const temp: number[] = []
-      // for(let key in eventDetails.value) {
-      //   const value = eventDetails.value[key]
-      // }
       temp.push(dayjs().diff(startDate.value, 'd'))
       Object.entries(eventDetails.value).forEach(
         ([key, value]) => {
@@ -189,13 +213,72 @@ export default defineComponent({
     })
 
     const computeShowDate = (day: number) => {
-      // console.log(day);
       const checker = computeDateChecker.value.find((a: number) => a == day)
       if(checker != undefined) {
         return '100'
       } else {
         return '0'
       }
+    }
+
+    const computeSortMethod = computed(() => {
+      eventDetails.value.specialEvent.sort((a: SpecialEvent,b: SpecialEvent) => {
+        if(dayjs(a.startDate).isAfter(dayjs(b.startDate),'d')) {
+          return 1
+        } else {
+          return -1
+        }
+      })
+
+      eventDetails.value.specialEvent.sort((a: SpecialEvent,b: SpecialEvent) => {
+        if(dayjs().isAfter(dayjs(b.endDate),'d')) { return -1 } else { return 0 }
+      })
+    })
+
+    computeSortMethod.value
+
+    // onMounted(() => {
+      
+    // })
+
+    const pastEvent = (time?: string) => {
+      if(dayjs(time).isAfter(dayjs(), 'd') || dayjs(time).isSame(dayjs(), 'd') ) {
+        return 'none'
+      } else {
+        return 'grayscale(1)'
+      }
+    }
+
+    const scrollLeftShow = ref(false)
+    const scrollRightShow = ref(true)
+
+    const scrollChecker = (e: any) => {
+      const target = e.target
+      target.scrollLeft == 0 ? scrollLeftShow.value = false : scrollLeftShow.value = true
+      target.scrollLeft == target.scrollWidth - target.clientWidth ? scrollRightShow.value = false : scrollRightShow.value = true
+    }
+
+    const scrollEvent = (direction: string) => {
+      const target = document.querySelector('#app > div > div > div.overflow-x-scroll') as HTMLDivElement
+
+      if(direction == 'left') {
+        if(!interval.value) {
+          interval.value = setInterval(() => {
+            target.scrollLeft -= 3
+          } , 4)
+        }
+      } else if(direction == 'right') {
+        if(!interval.value) {
+          interval.value = setInterval(() => {
+            target.scrollLeft += 3
+          } , 4)
+        }
+      }
+    }
+
+    const endScrollEvent = (direction: string) => {
+      clearInterval(interval.value)
+      interval.value = 0
     }
 
     // unused animation
@@ -220,7 +303,13 @@ export default defineComponent({
       mouseOverEvent,
       computeTodayLine,
       computeShowDate,
-      computeDateChecker
+      computeDateChecker,
+      scrollEvent,
+      endScrollEvent,
+      scrollLeftShow,
+      scrollRightShow,
+      scrollChecker,
+      pastEvent
     }
   }
 })
