@@ -175,10 +175,12 @@ export default defineComponent({
       return dayjs(startDate.value).add(month, 'month').format('MMM')
     }
 
-    let offset = 1
     const calculateOffSet = (month: number) => {
+      let offset = 1
+      
       if(month == 0) return offset
       else {
+        console.log(offset);
         offset = calculateDaysInMonth(month - 1) + offset
         return offset
       }
@@ -233,11 +235,12 @@ export default defineComponent({
       eventDetails.value.specialEvent.sort((a: SpecialEvent,b: SpecialEvent) => {
         if(dayjs().isAfter(dayjs(b.endDate),'d')) { return -1 } else { return 0 }
       })
+
+      return eventDetails.value.specialEvent
     })
 
-
     onMounted(() => {
-      console.log(computeSortMethod.value)      
+      computeSortMethod.value
     })
 
     const pastEvent = (time?: string) => {
@@ -308,7 +311,8 @@ export default defineComponent({
       scrollLeftShow,
       scrollRightShow,
       scrollChecker,
-      pastEvent
+      pastEvent,
+      
     }
   }
 })
